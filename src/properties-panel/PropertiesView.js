@@ -4,6 +4,9 @@ import React, { Component } from 'react';
 
 import './PropertiesView.css';
 
+import jsPDF from 'jspdf';
+
+import html2canvas from 'html2canvas';
 
 export default class PropertiesView extends Component {
 
@@ -49,7 +52,6 @@ export default class PropertiesView extends Component {
         return;
       }
 
-      // update panel, if currently selected element changed
       if (element.id === currentElement.id) {
         this.setState({
           element
@@ -70,9 +72,20 @@ export default class PropertiesView extends Component {
       element
     } = this.state;
 
+    function downloadAsPDF() {
+      html2canvas(document.querySelector('#modeler-container')).then(canvas => {
+        const pdf = new jsPDF('p', 'mm', 'a4'); 
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 150); 
+        pdf.save('bpmn-diagram.pdf'); 
+      });
+    }
     return (
       <div>
-
+      <div style={{ marginBottom: '1em' }}>
+      <button style={{ padding: '8px 16px', borderRadius: '6px', backgroundColor: '#1976d2', color: 'white' }} onClick={downloadAsPDF}>
+  📄 Download Diagram as PDF
+</button>
+      </div>
         {
           selectedElements.length === 1
             && <ElementProperties modeler={ modeler } element={ element } />
@@ -80,13 +93,15 @@ export default class PropertiesView extends Component {
 
         {
           selectedElements.length === 0
-            && <span>Please select an element.</span>
+            && <span>Please Select An Element</span>
         }
 
         {
           selectedElements.length > 1
             && <span>Please select a single element.</span>
         }
+
+
       </div>
     );
   }
@@ -179,19 +194,19 @@ function ElementProperties(props) {
 
   return (
     <div className="element-properties" key={ element.id }>
-      <fieldset>
+      {/* <fieldset>
         <label>id</label>
         <span>{ element.id }</span>
-      </fieldset>
+      </fieldset> */}
 
-      <fieldset>
+      {/* <fieldset>
         <label>name</label>
         <input value={ element.businessObject.name || '' } onChange={ (event) => {
           updateName(event.target.value)
         } } />
-      </fieldset>
+      </fieldset> */}
 
-      {
+      {/* {
         is(element, 'custom:TopicHolder') &&
           <fieldset>
             <label>topic (custom)</label>
@@ -199,10 +214,10 @@ function ElementProperties(props) {
               updateTopic(event.target.value)
             } } />
           </fieldset>
-      }
+      } */}
 
       <fieldset>
-        <label>actions</label>
+        <label>Actions</label>
 
         {
           is(element, 'bpmn:Task') && !is(element, 'bpmn:ServiceTask') &&

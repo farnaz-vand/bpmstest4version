@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modeler from 'bpmn-js/lib/Modeler';
-import PropertiesPanel from './properties-panel'; 
-import TopicPropertiesPanel from './components/TopicPropertiesPanel'; 
+import PropertiesPanel from './properties-panel';
+import TopicPropertiesPanel from './components/TopicPropertiesPanel';
 import customModdleExtension from './moddle/custom.json';
 import diagramXML from './diagram.bpmn';
+import BpmnEditor from '../src/parts/BpmnEditor';
 
 const $modelerContainer = document.querySelector('#modeler-container');
 const $propertiesContainer = document.querySelector('#properties-container');
@@ -48,7 +49,7 @@ async function sendToBackend(xml) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_TOKEN' // اگر لازم باشه
+        'Authorization': 'Bearer YOUR_API_TOKEN' 
       },
       body: JSON.stringify({ xml })
     });
@@ -66,6 +67,20 @@ async function sendToBackend(xml) {
   }
 }
 
-// در اینجا کامپوننت TopicPropertiesPanel رو به صفحه اضافه می‌کنیم.
 const propertiesPanelContainer = document.querySelector('#properties-container');
 ReactDOM.render(<TopicPropertiesPanel modeler={modeler} />, propertiesPanelContainer);
+
+function App() {
+  useEffect(() => {
+ 
+  }, []);
+
+  return (
+    <div className="App">
+      <h1>Welcome to BPMN Editor</h1>
+      <BpmnEditor />
+    </div>
+  );
+}
+
+export default App;
