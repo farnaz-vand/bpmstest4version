@@ -224,7 +224,6 @@ function ElementProperties(props) {
 }
 
 
-// helpers ///////////////////
 
 function hasDefinition(event, definitionType) {
 
